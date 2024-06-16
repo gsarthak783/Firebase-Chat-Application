@@ -7,6 +7,7 @@ import Register from '../Pages/Register';
 import Navbar from '../Components/Navbar';
 import PrivateRoute from '../PrivateRouting/PrivateRoute'
 import Private from '../Pages/Private'
+import ChatPage from '../Pages/ChatPage'
 
 function Router() {
 
@@ -22,6 +23,7 @@ function Router() {
                 <Route path='login' element={<Login/>} />
                 <Route path='register' element={<Register/>} />
                 <Route path='private' element={<PrivateRoute><Private/></PrivateRoute>} />
+                <Route path='chat' element={<ChatPage/>} />
             </Routes>
         </BrowserRouter>
     </div>

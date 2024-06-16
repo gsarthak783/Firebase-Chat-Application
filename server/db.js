@@ -11,9 +11,9 @@ mongoose.connect(DB_URL)
 
 //creating schema
 const message = new mongoose.Schema({
-    sender:String,
-    message: String,
-    date:String
+    user: { type: String, required: true },
+    message: { type: String, required: true },
+    timestamp: { type: Date, default: Date.now },
 })
 
 const Message = mongoose.model('message',message)
