@@ -29,7 +29,8 @@ const Register = () => {
         const update = await updateProfile(auth.currentUser, {
             displayName: name
           })
-        console.log("Name Added")  
+        console.log("Name Added") 
+        navigate('/') 
     }
     catch(err){
         console.log("Error", err)

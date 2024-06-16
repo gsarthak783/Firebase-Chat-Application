@@ -7,9 +7,12 @@ import { useState } from 'react';
 
 const Navbar = () => {
     const [user,setUser] = useState({})
+    const [name,setName] = useState("")
     onAuthStateChanged(auth, (currentUser) => {
         setUser(currentUser);
         console.log(user)
+        console.log(user?.displayName)
+        setName(user?.displayName);
     })
 
     const logout = async () => {
@@ -22,12 +25,16 @@ const Navbar = () => {
         <div className="flex space-x-4 font-mono">
         {user === null ? (
             <>
+            <Link to={`/chat/${name}`} className="text-white bg-blue-500 p-2 rounded-lg ">Chat</Link>
         <Link to='register' className="text-white bg-blue-500 p-2 rounded-lg ">Register</Link>
         <Link to='login' className="text-white bg-blue-500 p-2 rounded-lg ">Login</Link>
             </>
         ) : (
            <div>
            {user?.email}
+
+           <Link to={`/chat/${name}`} className="text-white bg-blue-500 p-2 rounded-lg ">Chat</Link>
+
            <button
            onClick={logout}
             className='mx-2 bg-blue-600 text-white p-2 rounded-lg'>Logout</button>

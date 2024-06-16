@@ -1,12 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import io from 'socket.io-client';
+import { useParams } from 'react-router-dom';
 
 const socket = io('http://localhost:5000'); // Replace with your server URL
 
 const ChatPage = () => {
+    const {name} = useParams()
     const [messages, setMessages] = useState([]);
     const [message, setMessage] = useState('');
-    const [user, setUser] = useState('User' + Math.floor(Math.random() * 1000)); // Random username for simplicity
+    // const [user, setUser] = useState('User' + Math.floor(Math.random() * 1000));
+    const [user, setUser] = useState(name); // Random username for simplicity
     const messageEndRef = useRef(null);
 
     useEffect(() => {
