@@ -1,0 +1,23 @@
+get http://localhost:6000/message-api/get-message
+
+###
+get http://localhost:6000/message-api/get-message/sarthak
+
+###
+post http://localhost:6000/message-api/create-message
+Content-Type: application/json
+
+{
+    "sender":"sarthak",
+    "message":"HII",
+    "date":"13-06-2024"
+}
+
+
+###
+delete http://localhost:6000/message-api/delete-message
+Content-Type: application/json
+
+{
+    "_id": "66674cb113407f53d0a6ec2b"
+}
