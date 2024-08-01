@@ -23,7 +23,7 @@ function Router() {
                 <Route path='login' element={<Login/>} />
                 <Route path='register' element={<Register/>} />
                 <Route path='private' element={<PrivateRoute><Private/></PrivateRoute>} />
-                <Route path='chat/:name' element={<PrivateRoute><ChatPage/></PrivateRoute>} />
+                <Route path='chat/:username' element={<PrivateRoute><ChatPage/></PrivateRoute>} />
             </Routes>
         </BrowserRouter>
     </div>

@@ -12,23 +12,7 @@ const PrivateRoute = ({ children }) => {
   const [user,setUser] = useState({})
     onAuthStateChanged(auth, (currentUser) => {
         setUser(currentUser);
-        console.log(user)
     })
- 
- 
-  // useEffect(()=>{
-  //   if(loginStatus){
-  //    setLoading(false);
-  //   }
-  //   else{
-  //     setLoading(true);
-  //   }
-    
-  // },[loginStatus])
-  
-  // if(loading){
-  //   return <div className="text-center text-3xl mx-20">Loading...</div>
-  //  } 
 
       return user ? (
         children

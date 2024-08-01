@@ -4,9 +4,9 @@ require('dotenv').config()
 
 const DB_URL = process.env.ATLAS_DB_URL;
 
-mongoose.connect(DB_URL)
-.then(()=> console.log("DB Connect Success"))
-.catch(err => console.log("Error in DB Connect", err))
+// mongoose.connect(DB_URL)
+// .then(()=> console.log("DB Connect Success"))
+// .catch(err => console.log("Error in DB Connect", err))
 
 
 //creating schema

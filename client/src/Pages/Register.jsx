@@ -2,7 +2,7 @@ import React from 'react'
 import { FaEye, FaEyeSlash } from 'react-icons/fa6';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { createUserWithEmailAndPassword,updateProfile} from 'firebase/auth';
+import { createUserWithEmailAndPassword,updateProfile,signOut} from 'firebase/auth';
 import { auth } from '../Firebase/Firebase';
 import { useNavigate } from 'react-router-dom';
 
@@ -30,7 +30,8 @@ const Register = () => {
             displayName: name
           })
         console.log("Name Added") 
-        navigate('/') 
+        signOut(auth);
+        navigate('/login') 
     }
     catch(err){
         console.log("Error", err)
@@ -43,7 +44,7 @@ const Register = () => {
         <div className="max-w-screen-2xl container mx-auto xl:px-24 px-4">
       <div className="bg-blue-50 py-10 px-4 lg:px-16">
 
-        <div className=" flex  justify-center bg-white rounded px-6 pt-4 pb-4 mb-2 mx-20">
+        <div className=" flex justify-center bg-white rounded px-6 pt-4 pb-4 mb-2 mx-20">
 
         <form
           
@@ -75,7 +76,7 @@ const Register = () => {
             </div>
 
             <div className="lg:w-1/2 w-full relative ">
-            <label className="block mb-2 text-lg"> Enter Name <span className='text-red-500'>*</span></label>
+            <label className="block mb-2 text-lg"> Name <span className='text-red-500'>*</span></label>
               <input
                 id='name'
                 name='name'

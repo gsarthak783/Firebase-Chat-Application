@@ -12,6 +12,7 @@ const HomePage = () => {
           try {
             const response = await axios.get("https://temp-server-virid.vercel.app/message-api/get-message");
             setMessages(response.data.payload.reverse());
+         //   console.log(import.meta.env.VITE_ABC)
            ;
           } catch (error) {
             console.error('Error fetching messages:', error);
@@ -22,6 +23,7 @@ const HomePage = () => {
           fetchMessages();
        
       }, []);
+
 
 return (<>
     <div className="min-h-screen bg-slate-100 p-4 flex flex-col items-center">

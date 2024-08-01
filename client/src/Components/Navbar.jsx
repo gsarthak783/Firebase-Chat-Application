@@ -6,17 +6,22 @@ import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { useState } from 'react';
 
 const Navbar = () => {
+
+   
     const [user,setUser] = useState({})
-    const [name,setName] = useState("")
+    const [username,setUsername] = useState("")
     onAuthStateChanged(auth, (currentUser) => {
         setUser(currentUser);
         console.log(user)
-        console.log(user?.displayName)
-        setName(user?.displayName);
+        console.log(user?.email)
+        setUsername(user?.email);
     })
 
     const logout = async () => {
         signOut(auth);
+       // window.location.reload();
+        
+
     }
   return (
     <div className="bg-slate-300 p-4">
@@ -25,7 +30,7 @@ const Navbar = () => {
         <div className="flex space-x-4 font-mono">
         {user === null ? (
             <>
-            <Link to={`/chat/${name}`} className="text-white bg-blue-500 p-2 rounded-lg ">Chat</Link>
+            <Link to={`/chat/${username}`} className="text-white bg-blue-500 p-2 rounded-lg ">Chat</Link>
         <Link to='register' className="text-white bg-blue-500 p-2 rounded-lg ">Register</Link>
         <Link to='login' className="text-white bg-blue-500 p-2 rounded-lg ">Login</Link>
             </>
@@ -33,8 +38,8 @@ const Navbar = () => {
            <div>
            {user?.email}
 
-           <Link to={`/chat/${name}`} className="text-white bg-blue-500 p-2 rounded-lg ">Chat</Link>
-
+           <Link to={`/chat/${username}`} className="text-white bg-blue-500 p-2 rounded-lg ">Chat</Link>
+           {/* <Link to='/' onClick={logout} className="text-white bg-blue-500 p-2 rounded-lg ">Logout</Link> */}
            <button
            onClick={logout}
             className='mx-2 bg-blue-600 text-white p-2 rounded-lg'>Logout</button>

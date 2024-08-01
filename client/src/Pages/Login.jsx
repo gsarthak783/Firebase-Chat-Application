@@ -3,22 +3,33 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa6';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { auth } from '../Firebase/Firebase';
-import { signInWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { signInWithEmailAndPassword, updateProfile, sendPasswordResetEmail } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
+
+    const navigate = useNavigate();
 
     const [showPass, setShowPass] = useState(false);
     const [loginEmail,setLoginEmail] = useState("")
     const [loginPassword,setLoginPassword] = useState("")
     const [name, setName] = useState("");
 
-    const updateName = async () =>{
-        try{
-            const userName = await updateProfile(auth.currentUser, {
-                displayName: name
-              })
+    const [isOpen, setIsOpen] = useState(false);
 
-              console.log("Name Updated")
+    const togglePopup = (e) => {
+        e.preventDefault();
+      setIsOpen(!isOpen);
+    }
+
+
+    const resetPassword = async (e) =>{
+        e.preventDefault();
+        try{
+            const reset = await sendPasswordResetEmail(auth, loginEmail);
+
+              console.log("Password Reset mail sent")
+              setIsOpen(!isOpen);
         }
         catch(err){
             console.log("Error", err)
@@ -36,6 +47,8 @@ const Login = () => {
     e.preventDefault();
     try{
         const user = await signInWithEmailAndPassword(auth, loginEmail, loginPassword)
+        navigate('/');
+
     }
     catch(err){
         console.log("Error" ,err)
@@ -46,7 +59,7 @@ const Login = () => {
     <div className="max-w-screen-2xl container mx-auto xl:px-24 px-4">
       <div className="bg-blue-50 py-10 px-4 lg:px-16">
 
-        <div className=" flex  justify-center bg-white rounded px-6 pt-4 pb-4 mb-2 mx-20">
+        <div className=" flex justify-center bg-white rounded px-6 pt-4 pb-4 mb-2 mx-20">
 
         <form
           
@@ -82,11 +95,24 @@ const Login = () => {
 
           <div className="flex items-center justify-between">
             <button
-              className="w-1/4 block mt-6 bg-blue-500 hover:bg-blue-700 text-white font-semibold px-8 py-2 rounded-sm cursor-pointer"
+              className="w-1/2 block mx-2 mt-6 bg-blue-500 hover:bg-blue-700 text-white font-semibold px-8 py-2 rounded-sm cursor-pointer"
               onClick={loginUser}
 
             >
               Login
+            </button>
+
+            {/* <div className='text-gray-700 text-sm font-semibold  hover:underline cursor-pointer space-y-[5]'>
+                <a href='' onClick={resetPassword}>
+            Reset Password
+                </a></div> */}
+
+            <button
+              className="w-1/2 block mx-2 mt-6 bg-blue-500 hover:bg-blue-700 text-white font-semibold px-8 py-2 rounded-sm cursor-pointer"
+              onClick={togglePopup}
+
+            >
+              Reset Password
             </button>
 
             {/* <Link to="/register"
@@ -96,55 +122,30 @@ const Login = () => {
               </Link> */}
 
           </div>
-
-          {/* <div className=" mt-2 ">
-
-            <Link to="#"
-              className=" text-gray-700 text-sm font-semibold  hover:underline cursor-pointer space-y-[5]"
-
-            >
-              Forgot Password?
-            </Link>
-
-            <div className='flex'>
-              <div className='flex text-gray-500 font-semibold'>
-                Don't have an account?
-              </div>
-              <Link to="/register"
-                className="flex text-gray-700 pl-1 text-m font-bold mb-2 hover:underline cursor-pointer space-y-[5]"
-
-              >
-                Register
-              </Link>
-            </div>
-
-          </div> */}
         </form>
-
-        
-        {/* <p className="text-center text-gray-500 text-xs">
-          &copy;2024 JobPortal. All rights reserved.
-        </p> */}
 
 </div>
 
-<div className=" ">
-              <label className="block mb-2 text-lg"> Enter Name <span className='text-red-500'>*</span></label>
-              <input
-                id='name'
-                name='name'
-                placeholder="Enter name..."
-               onChange={(event)=>{setName(event.target.value)}}
-                className="create-job-input border-2"
-              />
-              <button
-              className="w-1/4 block mt-6 bg-blue-500 hover:bg-blue-700 text-white font-semibold px-8 py-2 rounded-sm cursor-pointer"
-              onClick={updateName}
 
+        {isOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="w-full max-w-md p-6 mx-2 bg-slate-100 rounded shadow-lg">
+            <h2 className="mb-4 text-2xl font-bold text-blue-500">Reset Mail</h2>
+            <p className="mb-4 text-gray-700">
+             Click on the below button to send reset password for {loginEmail}.
+            </p>
+            <button
+              onClick={resetPassword}
+              className="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700"
             >
-              Update
+              Send Reset Mail
             </button>
-            </div>
+          </div>
+        </div>
+      )}
+
+
+
       </div>
      
     </div>

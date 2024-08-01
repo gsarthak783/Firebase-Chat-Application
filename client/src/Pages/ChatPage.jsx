@@ -5,14 +5,18 @@ import { useParams } from 'react-router-dom';
 const socket = io('http://localhost:5000'); // Replace with your server URL
 
 const ChatPage = () => {
-    const {name} = useParams()
+    const { username } = useParams();
     const [messages, setMessages] = useState([]);
     const [message, setMessage] = useState('');
-    // const [user, setUser] = useState('User' + Math.floor(Math.random() * 1000));
-    const [user, setUser] = useState(name); // Random username for simplicity
+    const [user, setUser] = useState(username);
+    const [activeUsers, setActiveUsers] = useState([]);
     const messageEndRef = useRef(null);
 
     useEffect(() => {
+        socket.emit('join', { username });
+
+        socket.emit('user-disconnect', { username });
+
         socket.on('init', (messages) => {
             setMessages(messages);
         });
@@ -21,11 +25,16 @@ const ChatPage = () => {
             setMessages((prevMessages) => [...prevMessages, message]);
         });
 
+        socket.on('updateUsers', (users) => {
+            setActiveUsers(users);
+        });
+
         return () => {
             socket.off('init');
             socket.off('message');
+            socket.off('updateUsers');
         };
-    }, []);
+    }, [username]);
 
     useEffect(() => {
         messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -41,9 +50,9 @@ const ChatPage = () => {
     };
 
     return (
-        <div className="flex flex-col h-screen bg-gray-100 mx-40  border-4">
-            <h1 className='text-2xl text-center font-bold'>Chat Application</h1>
+        <div className="flex min-h-screen bg-gray-100 mx-40 border-4">
             <div className="flex-grow p-6 overflow-auto">
+                <h1 className="text-2xl text-center font-bold">Chat Application</h1>
                 <div className="space-y-4">
                     {messages.map((msg, index) => (
                         <div
@@ -55,8 +64,8 @@ const ChatPage = () => {
                             <div
                                 className={`rounded-lg p-4 max-w-xs ${
                                     msg.user === user
-                                        ? 'bg-blue-500 text-white'
-                                        : 'bg-slate-200 text-black'
+                                        ? 'bg-blue-600 text-white'
+                                        : 'bg-green-600 text-white'
                                 }`}
                             >
                                 <div className="font-bold">{msg.user}</div>
@@ -67,9 +76,19 @@ const ChatPage = () => {
                     <div ref={messageEndRef} />
                 </div>
             </div>
+            <div className="w-1/4 p-4 bg-white border-l">
+                <h2 className="text-lg font-bold">Active Users</h2>
+                <ul className="space-y-2">
+                    {activeUsers.map((activeUser, index) => (
+                        <li key={index} className="p-2 bg-gray-200 rounded">
+                            {activeUser.username}
+                        </li>
+                    ))}
+                </ul>
+            </div>
             <form
                 onSubmit={sendMessage}
-                className="flex items-center p-4 bg-white border-t"
+                className="fixed bottom-0 left-0 right-0 flex items-center p-4 bg-white border-t"
             >
                 <input
                     type="text"
